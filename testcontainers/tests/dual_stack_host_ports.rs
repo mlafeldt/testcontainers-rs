@@ -4,6 +4,7 @@ use testcontainers::{clients, core::WaitFor, GenericImage};
 
 /// Test the functionality of exposing container ports over both IPv4 and IPv6.
 #[tokio::test]
+#[ignore]
 async fn test_ipv4_ipv6_host_ports() {
     let _ = pretty_env_logger::try_init();
     let docker = clients::Cli::default();

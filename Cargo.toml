@@ -1,5 +1,3 @@
 [workspace]
-members = [
-    "testcontainers",
-    "testimages",
-]
+members = [ "testcontainers", "testimages" ]
+resolver = "2"

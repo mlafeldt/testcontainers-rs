@@ -443,6 +443,23 @@ impl Docker for Cli {
 
         log::debug!("Container {} is now ready!", id);
     }
+
+    fn copy_to(&self, id: &str, src: &str, dst: &str) {
+        let status = self
+            .inner
+            .command()
+            .arg("cp")
+            .arg("--archive")
+            .arg(src)
+            .arg(format!("{id}:{dst}"))
+            .stdout(Stdio::piped())
+            .spawn()
+            .expect("Failed to execute docker command")
+            .wait()
+            .expect("Failed to wait on docker command");
+
+        assert!(status.success(), "Failed to copy file to container");
+    }
 }
 
 impl Drop for Client {

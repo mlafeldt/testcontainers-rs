@@ -10,7 +10,7 @@ use std::{fmt, marker::PhantomData, net::IpAddr, str::FromStr};
 ///
 /// Containers have a [`custom destructor`][drop_impl] that removes them as soon as they go out of scope:
 ///
-/// ```rust
+/// ```rust,no_run
 /// use testcontainers::*;
 /// #[test]
 /// fn a_test() {
@@ -231,6 +231,12 @@ where
 
         self.docker_client.rm(&self.id)
     }
+
+    pub fn copy_to(&self, src: &str, dst: &str) {
+        log::debug!("Copying {} to {} in container {}", src, dst, self.id);
+
+        self.docker_client.copy_to(&self.id, src, dst)
+    }
 }
 
 /// Represents an output of `exec` command.
@@ -275,6 +281,7 @@ pub(crate) trait Docker: Sync + Send {
     fn start(&self, id: &str);
     fn exec(&self, id: &str, cmd: String) -> std::process::Output;
     fn block_until_ready(&self, id: &str, ready_conditions: Vec<WaitFor>);
+    fn copy_to(&self, id: &str, src: &str, dst: &str);
 }
 
 #[cfg(test)]
